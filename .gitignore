@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+
+# LaTeX 
+*.aux
+*.fls
+*.idx
+*.ilg
+*.ind
+*.log
+*.out
+*.toc
+*.fdb_latexmk
+*.synctex.gz
+
+# автоматически генерируемые файлы
+/*.pdf
+ans.tex
+*(busy)
+
+# директория сборки
+/build/*

@@ -1,0 +1,44 @@
+\documentclass[10pt, twoside, openany]{book}
+
+\input{preamble.tex}
+
+\includeonly{
+    usage_rules,
+    preface,
+    subject_of_chemistry,
+    structure_of_atom,
+    initial_chemical_concepts,
+    answers,
+    appendix,
+    index
+}
+
+\begin{document}
+
+\frontmatter
+\begin{titlepage}
+    \centering
+    \vspace*{6cm}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=6cm]{figs/titlepage/big_star_logo.pdf}
+    \end{figure}
+    \vspace*{0.5cm}
+    {\LARGE Учебник по общей химии\par}
+    \vfill
+    Вер. \textasciitilde
+\end{titlepage}
+
+\include{usage_rules}
+\include{preface}
+\tableofcontents
+\mainmatter
+\include{subject_of_chemistry}
+\include{structure_of_atom}
+\include{initial_chemical_concepts}
+\include{answers}     
+\backmatter
+\include{appendix}
+\include{index}
+
+\end{document}
