@@ -2,7 +2,7 @@
 
 Данный учебник распространяется под лицензией [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.ru) (Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International).
 
-Если вы хотите использовать его как-то иначе, пожалуйста, свяжитесь с автором (Михаил Коверда) по электронной почте [m@chemistry.org.ru](mailto:m@chemistry.org.ru).
+Если вы хотите использовать его как-то иначе, пожалуйста, свяжитесь с автором (Михаил Коверда) по электронной почте [mh.koverda@icloud.com](mailto:mh.koverda@icloud.com).
 
 ## Лицензия простым языком
 
