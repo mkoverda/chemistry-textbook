@@ -1,0 +1,58 @@
+\documentclass[10pt, twoside, openany]{book}
+
+\input{preamble.tex}
+
+\includeonly{
+    % Лицензия
+    usage_rules,
+    % Предисловие
+    preface,
+    % Предмет изучения химии
+    subject_of_chemistry,
+    % Строение атома
+    structure_of_atom,
+    % Первоначальные химические понятия
+    initial_chemical_concepts,
+    % Окисление и восстановление
+    oxidation_and_reduction,
+    % Равновесия в водных растворах
+    equilibria_in_aqueous_solutions,
+    % Ответы на задачи
+    answers,
+    % Приложения
+    appendix,
+    % Предметный указатель
+    index
+}
+
+\begin{document}
+
+\frontmatter
+\begin{titlepage}
+    \centering
+    \vspace*{6cm}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=6cm]{figs/titlepage/big_star_logo.pdf}
+    \end{figure}
+    \vspace*{0.5cm}
+    {\LARGE Учебник по общей химии\par}
+    \vfill
+    Вер. 0.1
+\end{titlepage}
+
+\include{usage_rules}
+\include{preface}
+\tableofcontents
+\mainmatter
+\include{subject_of_chemistry}
+\include{structure_of_atom}
+\include{initial_chemical_concepts}
+\include{oxidation_and_reduction}
+\include{equilibria_in_aqueous_solutions}
+\include{answers}     
+\backmatter
+\include{appendix}
+\include{index}
+
+\end{document}
