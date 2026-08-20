@@ -19,4 +19,5 @@ ans.tex
 *(busy)
 
 # директория сборки
-# /build/*
+/build/*
+/.vscode/*
