@@ -9,7 +9,7 @@
 ]{geometry}
 \usepackage[T2A]{fontenc}     
 \usepackage[russian]{babel}
-\usepackage{indentfirst}   % красная строка и в первом абзаце после заголовка
+\usepackage{indentfirst}
 
 %--- форматирование         
 \usepackage{pdflscape}
@@ -74,7 +74,7 @@
     }
     {prob}
 \Newassociation{sol}{solution}{solutions}
-\renewcommand{\solution}[1]{}
+\renewcommand{\solution}[1]{\ignorespaces}
 \Opensolutionfile{solutions}[ans]
 \newtcbtheorem[number within=section]
     {example}
@@ -193,7 +193,7 @@
 %--- форматирование химических формул и уравнений
 \usepackage[version=4]{mhchem}
 \mhchemoptions{layout=stacked} % выравнивание заряда и количества атомов по вертикали
-% создание окружений reaction и reaction*
+%--- создание окружений reaction и reaction*
 \makeatletter
 \newcounter{reaction}
 \renewcommand\thereaction{C\,\thechapter.\arabic{reaction}}
