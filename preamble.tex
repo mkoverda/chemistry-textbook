@@ -9,11 +9,9 @@
 \usepackage[T2A]{fontenc}     
 \usepackage[russian]{babel}
 
-%--- форматирование
-\usepackage{pdfpages}           
+%--- форматирование         
 \usepackage{pdflscape}
-\usepackage{float}                         
-\usepackage{booktabs}           
+\usepackage{float}                                   
 \usepackage{multirow}   
 \usepackage{adjustbox}         
 \usepackage{titlesec}
@@ -25,7 +23,6 @@
 \usepackage{amssymb, amsmath}
 \usepackage{wasysym} % для символа в блоке потока терминов
 \usepackage{pifont} % для цифр в окружности (для диаграмм)
-\usepackage{hyperref}
 \usepackage[nopatch=footnote]{microtype}
 
 %--- переопределение формата заголовков
@@ -148,7 +145,6 @@
 \usepackage{tabularx}           
 \usepackage{ragged2e}           
 \usepackage{array}              
-\usepackage{booktabs}
 \newcolumntype{Y}{>{\RaggedRight\hspace{0pt}\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \setlength{\tabcolsep}{6pt}
@@ -262,3 +258,12 @@
 \DeclareSIUnit\M{\text{М}}
 %--- температура
 \DeclareSIUnit\K{\text{К}}
+
+%--- hyperref
+\usepackage{hyperref}
+\hypersetup{
+    pdftitle={Учебник по общей химии},
+    pdfauthor={Михаил Коверда},
+    pdflang={ru},
+    bookmarksnumbered=true
+}
