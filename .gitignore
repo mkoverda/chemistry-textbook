@@ -20,7 +20,10 @@ ans.tex
 
 # директория сборки
 /build/*
+
+# настройки редактора
 /.vscode/*
+!/.vscode/settings.json
 
 # служебные файлы
 *~lock~

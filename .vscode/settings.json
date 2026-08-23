@@ -1,0 +1,21 @@
+{
+  // Где расширение ищет результат сборки и вспомогательные файлы.
+  // Эти два пути нужны самому LaTeX Workshop (просмотр PDF, SyncTeX,
+  // разбор main.log для панели Problems), поэтому дублируют latexmkrc.
+  "latex-workshop.latex.outDir": "%DIR%",
+  "latex-workshop.latex.auxDir": "%DIR%/build",
+
+  // Все параметры сборки заданы в latexmkrc в корне проекта.
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk",
+      "command": "latexmk",
+      "args": ["%DOC%"],
+      "env": {}
+    }
+  ],
+
+  "latex-workshop.latex.recipes": [
+    { "name": "latexmk", "tools": ["latexmk"] }
+  ]
+}
