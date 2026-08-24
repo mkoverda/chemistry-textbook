@@ -165,7 +165,7 @@
 
 %--- термин: жирное начертание в тексте + метка + запись в указатель
 \makeatletter
-\newcommand{\term}[2]{\textbf{#1}\label{term:#2}\term@index}
+\newcommand{\term}[2]{\textbf{#1}\phantomsection\label{term:#2}\term@index}
 \newcommand{\term@index}{\begingroup\@sanitize\term@index@}
 \newcommand{\term@index@}[1]{\endgroup\index{#1}}
 \makeatother
