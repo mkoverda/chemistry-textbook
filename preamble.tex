@@ -7,21 +7,21 @@
     includeheadfoot=true,
     headheight=12.6pt
 ]{geometry}
-\usepackage[T2A]{fontenc}     
+\usepackage[T2A]{fontenc}
 \usepackage[russian]{babel}
 \usepackage{indentfirst}
 
-%--- форматирование         
+%--- форматирование
 \usepackage{pdflscape}
-\usepackage{float}                                   
-\usepackage{multirow}   
-\usepackage{adjustbox}         
+\usepackage{float}
+\usepackage{multirow}
+\usepackage{adjustbox}
 \usepackage{titlesec}
-\usepackage{enumitem}     
+\usepackage{enumitem}
 \setlist[enumerate]{noitemsep, topsep=1mm}
 \setlist[itemize]{noitemsep, topsep=1mm}
 \usepackage{graphicx}
-\usepackage{wrapfig}          
+\usepackage{wrapfig}
 \usepackage{amssymb, amsmath}
 \usepackage{wasysym} % для символа в блоке потока терминов
 \usepackage{pifont} % для цифр в окружности (для диаграмм)
@@ -31,16 +31,16 @@
 \titlespacing{\subsection}{0pt}{*2}{*1}
 \titleformat{\subsection}
     {\normalfont\large\bfseries}
-    {\thesubsection}              
-    {1em}                         
+    {\thesubsection}
+    {1em}
     {}
 
 %--- оформление задач и примеров
-\usepackage{tcolorbox}          
-\tcbuselibrary{theorems}             
-\tcbuselibrary{skins}           
-\tcbuselibrary{breakable}       
-\usepackage{answers}            
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+\tcbuselibrary{skins}
+\tcbuselibrary{breakable}
+\usepackage{answers}
 \newtcbtheorem[number within=section]
     {problem}
     {Задача}
@@ -61,8 +61,8 @@
         },
         colback=white,
         top=1mm,
-        bottom=0mm,   
-        left=0.5mm,     
+        bottom=0mm,
+        left=0.5mm,
         right=0.5mm,
         before skip=2mm,
         after skip=2mm,
@@ -92,8 +92,8 @@
         },
         colback=white,
         top=1mm,
-        bottom=0mm,   
-        left=0.5mm,     
+        bottom=0mm,
+        left=0.5mm,
         right=0.5mm,
         before skip=2mm,
         after skip=2mm,
@@ -110,14 +110,14 @@
 %--- формат потока терминов
 \newtcolorbox{termlist}{
     toptitle=1pt,
-    bottomtitle=0.5pt,   
+    bottomtitle=0.5pt,
     title={$\photon$ \textbf{Поток терминов} $\photon \photon \photon$},
     colframe=green_sea,
     colback=white,
     boxrule=0.5pt,
     top=1pt,
     bottom=1pt,
-    left=0.5mm,     
+    left=0.5mm,
     right=0.5mm,
     before skip=2mm,
     after skip=2mm,
@@ -140,11 +140,11 @@
 \fancyhead[LO]{\rightmark}
 
 %--- настройка таблиц
-\usepackage{xcolor}             
-\usepackage{colortbl}           
-\usepackage{tabularx}           
-\usepackage{ragged2e}           
-\usepackage{array}              
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{tabularx}
+\usepackage{ragged2e}
+\usepackage{array}
 \newcolumntype{Y}{>{\RaggedRight\hspace{0pt}\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \setlength{\tabcolsep}{6pt}
@@ -224,11 +224,11 @@
 \sisetup{
     output-decimal-marker = {,},
     group-minimum-digits = 5,
-    group-digits = integer, % группировка только целой части числа          
+    group-digits = integer, % группировка только целой части числа
     exponent-product = \cdot,
     inter-unit-product = \cdot,
     per-mode = symbol, % группировка только целой части числа
-    sticky-per                         
+    sticky-per
 }
 
 %--- масса
