@@ -160,6 +160,13 @@
 \usepackage{makeidx}
 \makeindex
 
+%--- термин: жирное начертание в тексте + метка + запись в указатель
+\makeatletter
+\newcommand{\term}[2]{\textbf{#1}\label{term:#2}\term@index}
+\newcommand{\term@index}{\begingroup\@sanitize\term@index@}
+\newcommand{\term@index@}[1]{\endgroup\index{#1}}
+\makeatother
+
 %--- сквозная нумерация сносок
 \usepackage{chngcntr}
 \counterwithout{footnote}{chapter}
@@ -193,6 +200,7 @@
 %--- форматирование химических формул и уравнений
 \usepackage[version=4]{mhchem}
 \mhchemoptions{layout=stacked} % выравнивание заряда и количества атомов по вертикали
+
 %--- создание окружений reaction и reaction*
 \makeatletter
 \newcounter{reaction}
@@ -222,40 +230,50 @@
     per-mode = symbol, % группировка только целой части числа
     sticky-per                         
 }
+
 %--- масса
 \DeclareSIUnit\ruKg{\text{кг}}
 \DeclareSIUnit\ruG{\text{г}}
 \DeclareSIUnit\ruDa{\text{Да}}
+
 %--- длина
 \DeclareSIUnit\ruKm{\text{км}}
 \DeclareSIUnit\ruM{\text{м}}
 \DeclareSIUnit\ruCm{\text{см}}
 \DeclareSIUnit\ruMm{\text{мм}}
 \DeclareSIUnit\ruUm{\text{мкм}}
+
 %--- объём
 \DeclareSIUnit\ruL{\text{л}}
 \DeclareSIUnit\ruMl{\text{мл}}
 \DeclareSIUnit\ruKl{\text{кл}}
+
 %--- заряд
 \DeclareSIUnit\ruC{\text{Кл}}
 \DeclareSIUnit\ruEV{\text{эВ}}
+
 %--- количество вещества
 \DeclareSIUnit\ruMole{\text{моль}}
 \DeclareSIUnit\ruKmole{\text{кмоль}}
+
 %--- давление
 \DeclareSIUnit\ruPa{\text{Па}}
 \DeclareSIUnit\ruKPa{\text{кПа}}
 \DeclareSIUnit\ruMPa{\text{МПа}}
 \DeclareSIUnit\ruAtm{\text{атм}}
 \DeclareSIUnit\ruBar{\text{бар}}
+
 %--- время
 \DeclareSIUnit\ruS{\text{с}}
 \DeclareSIUnit\ruCh{\text{ч}}
+
 %--- энергия
 \DeclareSIUnit\ruJ{\text{Дж}}
 \DeclareSIUnit\ruKJ{\text{кДж}}
+
 %--- концентрация
 \DeclareSIUnit\ruMolar{\text{М}}
+
 %--- температура
 \DeclareSIUnit\ruK{\text{К}}
 
