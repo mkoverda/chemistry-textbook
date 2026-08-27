@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Проверки исходников.
 
@@ -18,37 +17,25 @@ import sys
 import glob
 import collections
 
-# ────────────────────────────────────────────────────────────────────────
-#  Настройки
-# ────────────────────────────────────────────────────────────────────────
 
-# Файл-точка входа; по нему находится корень проекта.
 ROOT_MARKER = "main.tex"
 
-# Каталоги с готовыми иллюстрациями и с их исходниками.
 FIG_DIRS = ("figs", "tables")
 SRC_FIG_DIRS = ("source_figs", "source_tables")
 
-# Каталог сборки (создаётся latexmk, см. latexmkrc).
 BUILD_DIR = "build"
 
-# Допустимые спецификаторы у плавающих объектов.
 FLOAT_SPECS = ("[htbp]", "[H]")
 
-# Команды siunitx, которые не являются единицами этого проекта.
 SIUNITX_BUILTINS = {
     "per", "squared", "cubed", "degree", "degreeCelsius", "percent",
     "of", "raiseto", "tothe", "highlight", "cancel",
 }
 
-# Длина строки, начиная с которой она считается длинной (F1, только счёт).
 LONG_LINE = 300
 
 CYR = "А-Яа-яЁё"
 
-# ────────────────────────────────────────────────────────────────────────
-#  Инфраструктура
-# ────────────────────────────────────────────────────────────────────────
 
 ERROR, WARN, INFO = "ОШИБКА", "ВНИМАНИЕ", "СПРАВКА"
 
@@ -58,7 +45,6 @@ CHECKS = []
 
 
 def check(code, title, level=ERROR):
-    """Декоратор: регистрирует функцию как проверку."""
     def wrap(fn):
         fn.code, fn.title, fn.level = code, title, level
         CHECKS.append(fn)
@@ -67,15 +53,14 @@ def check(code, title, level=ERROR):
 
 
 class Project(object):
-    """Исходники проекта, прочитанные один раз."""
 
     def __init__(self, root):
         self.root = root
         self.files = sorted(
             os.path.basename(p) for p in glob.glob(os.path.join(root, "*.tex"))
         )
-        self.raw = {}       # имя файла -> текст как есть
-        self.clean = {}     # то же, но с вырезанными комментариями
+        self.raw = {}
+        self.clean = {}
         for f in self.files:
             with open(os.path.join(root, f), encoding="utf-8") as fh:
                 s = fh.read()
@@ -98,12 +83,6 @@ class Project(object):
 
 
 def strip_comments(s):
-    """Убирает комментарии LaTeX, сохраняя длину строк и переводы строк.
-
-    Экранированный процент (\\%) комментарием не считается. Позиции символов
-    не сдвигаются: вместо вырезанного текста остаются пробелы, поэтому номер
-    строки и колонка остаются верными.
-    """
     out = []
     for line in s.split("\n"):
         i, n = 0, len(line)
@@ -121,7 +100,6 @@ def strip_comments(s):
 
 
 def braced(s, i):
-    """s[i] == '{' -> (содержимое, индекс за закрывающей скобкой)."""
     if i >= len(s) or s[i] != "{":
         raise ValueError("ожидалась '{'")
     depth, j = 0, i
@@ -141,11 +119,6 @@ def braced(s, i):
 
 
 def strip_env(s, *cmds):
-    """Заменяет аргументы указанных команд пробелами, сохраняя позиции.
-
-    Нужно, чтобы проверки текста не спотыкались о содержимое \\ce{…}, где
-    латиница и кириллица соседствуют законно.
-    """
     out = list(s)
     for cmd in cmds:
         for m in re.finditer(r"\\" + cmd + r"(?=\{)", s):
@@ -160,7 +133,6 @@ def strip_env(s, *cmds):
 
 
 def strip_math(s):
-    """Заменяет содержимое $…$ и \\[…\\] пробелами, сохраняя позиции."""
     out = list(s)
     for m in re.finditer(r"(?<!\\)\$(?:[^$\\]|\\.)*\$", s, re.S):
         for k in range(m.start(), m.end()):
@@ -171,12 +143,6 @@ def strip_math(s):
 
 
 def all_labels(p):
-    """Все метки проекта: где объявлены и сколько раз.
-
-    Метку создаёт не только \\label. Её порождают tcolorbox-окружения
-    problem и example (префиксы prob: и ex:), макрос \\term (term:)
-    и \\reaction с необязательным аргументом.
-    """
     found = collections.defaultdict(list)
     rules = (
         (re.compile(r"\\label\{([^}]*)\}"), ""),
@@ -192,17 +158,9 @@ def all_labels(p):
     return found
 
 
-# ────────────────────────────────────────────────────────────────────────
-#  A. Опечатки, которые LaTeX не заметит
-# ────────────────────────────────────────────────────────────────────────
 
 @check("A1", "Латиница внутри кириллического слова и наоборот")
 def check_alphabet_mix(p):
-    """Ловит вещи вроде \\text{cм}, где «c» латинская.
-
-    Такая подмена не даёт ни ошибки, ни предупреждения: символ существует,
-    просто он из другой азбуки и печатается другим шрифтом.
-    """
     pat = re.compile("[A-Za-z][" + CYR + "]|[" + CYR + "][A-Za-z]")
     for f in p.files:
         s = strip_env(strip_math(p.clean[f]), "ce", "label", "ref", "eqref",
@@ -215,7 +173,6 @@ def check_alphabet_mix(p):
 
 @check("A2", "Короткое тире или дефис в математическом режиме")
 def check_dash_in_math(p):
-    """В формуле «-» набирается как минус: $-2$, а не \\textendash или –."""
     for f in p.files:
         s = p.clean[f]
         for m in re.finditer(r"(?<!\\)\$(?:[^$\\]|\\.)*\$", s, re.S):
@@ -240,10 +197,6 @@ def check_begin_space(p):
 
 @check("A4", "Юникод вместо команд LaTeX")
 def check_unicode(p):
-    """Кавычки, тире и неразрывный дефис должны быть командами.
-
-    Исключения приняты сознательно: № и © (см. пункт C3 отчёта).
-    """
     allowed = set("№©")
     bad = {
         "\u00ab": "« → <<", "\u00bb": "» → >>",
@@ -264,7 +217,6 @@ def check_unicode(p):
 
 @check("A5", "Не совпадает число \\begin и \\end")
 def check_env_balance(p):
-    """Ловит обрыв правки: окружение открыто и не закрыто."""
     for f in p.files:
         opened = collections.Counter(re.findall(r"\\begin\{([a-zA-Z*]+)\}", p.clean[f]))
         closed = collections.Counter(re.findall(r"\\end\{([a-zA-Z*]+)\}", p.clean[f]))
@@ -275,16 +227,9 @@ def check_env_balance(p):
                               % (env, opened[env], closed[env]))
 
 
-# ────────────────────────────────────────────────────────────────────────
-#  B. Единицы измерения и химия
-# ────────────────────────────────────────────────────────────────────────
 
 @check("B1", "Неизвестная команда внутри \\qty/\\unit")
 def check_units(p):
-    """Список допустимых единиц берётся из \\DeclareSIUnit в преамбуле.
-
-    Ловит и старые односимвольные имена (\\l, \\M), и опечатки в новых.
-    """
     pre = p.clean.get("preamble.tex", "")
     declared = set(re.findall(r"\\DeclareSIUnit\\([a-zA-Z]+)", pre))
     if not declared:
@@ -312,12 +257,6 @@ def check_units(p):
 
 @check("B2", "Степень окисления вне математического режима", WARN)
 def check_oxidation_state(p):
-    """«степень окисления +7» должно быть «степень окисления $+7$».
-
-    Дело не только в единообразии: вне математики минус печатается
-    дефисом — он заметно уже плюса, и в одной строке с $-4$ разница
-    бросается в глаза.
-    """
     word = re.compile("степен\\w* окислени\\w*", re.I)
     sign = re.compile("(?<![\\w$+\\-])([+\\-\\u2212])\\s?\\d")
     for f in p.chapters:
@@ -341,7 +280,6 @@ def check_oxidation_state(p):
 
 @check("B3", "Пробел перед точкой внутри \\ce")
 def check_ce_dot(p):
-    """В mhchem « .» вне (^) и (v) даёт лишний пробел в формуле."""
     for f in p.chapters:
         s = p.clean[f]
         for m in re.finditer(r"\\ce(?=\{)", s):
@@ -355,13 +293,9 @@ def check_ce_dot(p):
                               "пробел перед точкой в \\ce{%s}" % body[:50])
 
 
-# ────────────────────────────────────────────────────────────────────────
-#  C. Единообразие оформления
-# ────────────────────────────────────────────────────────────────────────
 
 @check("C1", "Ссылка на формулу через \\ref вместо \\eqref")
 def check_eqref(p):
-    """Правило проекта: \\eqref везде, \\ref — только внутри скобок."""
     for f in p.chapters:
         s = p.clean[f]
         for m in re.finditer(r"\\ref\{(eq|ce):[^}]*\}", s):
@@ -369,7 +303,7 @@ def check_eqref(p):
             head = s[line_start:m.start()]
             open_paren = head.rfind("(")
             if open_paren >= 0 and ")" not in head[open_paren:]:
-                continue          # ссылка уже стоит внутри скобок
+                continue
             yield Finding(ERROR, f, p.line_of(f, m.start()),
                           "%s — нужен \\eqref (или скобки вокруг)" % m.group(0))
 
@@ -384,7 +318,6 @@ def check_boxed(p):
 
 @check("C3", "Ручной отступ \\hspace*{\\parindent}")
 def check_manual_indent(p):
-    """Красную строку после заголовка ставит indentfirst."""
     for f in p.chapters:
         for m in re.finditer(r"\\hspace\*?\{\\parindent\}", p.clean[f]):
             yield Finding(ERROR, f, p.line_of(f, m.start()),
@@ -404,11 +337,6 @@ def check_float_spec(p):
 
 @check("C5", "Плавающий объект без \\caption")
 def check_float_caption(p):
-    """Без подписи объекту незачем плавать: нужен center.
-
-    Таблицы приложения — исключение: у каждой свой \\section, подпись
-    дублировала бы заголовок.
-    """
     for f in p.chapters:
         if f == "appendix.tex":
             continue
@@ -425,8 +353,6 @@ def check_float_caption(p):
 
 @check("C6", "Ширина рисунка задана числом там, где это ширина полосы", WARN)
 def check_widths(p):
-    """13 см — это ровно \\linewidth; записанное числом, оно переживёт
-    правку полей и станет неправдой."""
     for f in p.chapters:
         s = p.clean[f]
         for m in re.finditer(r"\\includegraphics\[([^\]]*)\]", s):
@@ -493,9 +419,6 @@ def check_term_arity(p):
                               "\\term без третьего аргумента — съест текст следом")
 
 
-# ────────────────────────────────────────────────────────────────────────
-#  D. Указатель
-# ────────────────────────────────────────────────────────────────────────
 
 @check("D1", "Запись указателя с математикой без ключа сортировки")
 def check_index_sortkey(p):
@@ -540,9 +463,6 @@ def check_index_collision(p):
                           % (key, ", ".join(sorted(forms))))
 
 
-# ────────────────────────────────────────────────────────────────────────
-#  E. Задачи и ответы
-# ────────────────────────────────────────────────────────────────────────
 
 @check("E1", "Ключ задачи и ключ её решения не совпадают")
 def check_problem_sol(p):
@@ -585,9 +505,6 @@ def check_includeonly(p):
                           "глава «%s» подключена, но выключена в \\includeonly" % name)
 
 
-# ────────────────────────────────────────────────────────────────────────
-#  F. Метки, ссылки и файлы
-# ────────────────────────────────────────────────────────────────────────
 
 @check("F1", "Повторяющиеся метки")
 def check_dup_labels(p):
@@ -660,9 +577,6 @@ def check_figure_sources(p):
                                   "нет исходника в %s/" % src_dir)
 
 
-# ────────────────────────────────────────────────────────────────────────
-#  G. Гигиена исходников
-# ────────────────────────────────────────────────────────────────────────
 
 @check("G1", "Пробелы в конце строки", WARN)
 def check_trailing_ws(p):
@@ -689,9 +603,6 @@ def check_long_lines(p):
                       % (LONG_LINE, n, longest[2]))
 
 
-# ────────────────────────────────────────────────────────────────────────
-#  H. Журнал последней сборки
-# ────────────────────────────────────────────────────────────────────────
 
 @check("H1", "Ошибки и предупреждения последней сборки")
 def check_log(p):
@@ -746,9 +657,6 @@ def check_stats(p):
                   % (n_lab, n_fig, n_prob, len(p.files)))
 
 
-# ────────────────────────────────────────────────────────────────────────
-#  Запуск
-# ────────────────────────────────────────────────────────────────────────
 
 def find_root():
     here = os.path.dirname(os.path.abspath(__file__))
@@ -820,7 +728,7 @@ def main(argv):
             continue
         try:
             found = list(fn(p))
-        except Exception as e:                                  # noqa: BLE001
+        except Exception as e:
             found = [Finding(ERROR, "", 0,
                              "проверка упала: %s: %s" % (type(e).__name__, e))]
         for x in found:
