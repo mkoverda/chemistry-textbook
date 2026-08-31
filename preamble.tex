@@ -234,12 +234,6 @@
     sticky-per
 }
 
-%--- кубики для таблицы микросостояний
-\newcommand{\diewidth}{6.1mm} % ширина одного кубика
-\newcommand{\wdie}[1]{\includegraphics[width=\diewidth]{figs/entropy/die_w#1}}
-\newcommand{\rdie}[1]{\includegraphics[width=\diewidth]{figs/entropy/die_r#1}}
-\newcommand{\dpair}[2]{\mbox{\raisebox{-0.45\height}{\wdie{#1}\hspace{0.7mm}\rdie{#2}}}}
-
 %--- масса
 \DeclareSIUnit\ruKg{\text{кг}}
 \DeclareSIUnit\ruG{\text{г}}
@@ -251,6 +245,7 @@
 \DeclareSIUnit\ruCm{\text{см}}
 \DeclareSIUnit\ruMm{\text{мм}}
 \DeclareSIUnit\ruUm{\text{мкм}}
+\DeclareSIUnit\ruNm{\text{нм}}
 
 %--- объём
 \DeclareSIUnit\ruL{\text{л}}
@@ -285,6 +280,12 @@
 
 %--- температура
 \DeclareSIUnit\ruK{\text{К}}
+
+%--- кубики для таблицы микросостояний
+\newcommand{\diewidth}{6.1mm} % ширина одного кубика
+\newcommand{\wdie}[1]{\includegraphics[width=\diewidth]{figs/entropy/die_w#1}}
+\newcommand{\rdie}[1]{\includegraphics[width=\diewidth]{figs/entropy/die_r#1}}
+\newcommand{\dpair}[2]{\mbox{\raisebox{-0.45\height}{\wdie{#1}\hspace{0.7mm}\rdie{#2}}}}
 
 %--- hyperref
 \usepackage{hyperref}
